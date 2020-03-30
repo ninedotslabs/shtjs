@@ -16,3 +16,11 @@ export const div = a => b => a/b
 export const mod = a => b => a%b
 // fetch api wrap
 export const fetcher = url => opts => fetch(url,{opts}).then(x => x.json());
+// dom manipulation
+export const grabId = a => document.getElementById(a);
+export const elQry = a => document.querySelector(a);
+export const elInrTxt = el => txt => (el.innerText = inner);
+export const elInHtml = el => html => el.innerHTML = html;
+export const elGetAtr = el => atr => el.elGetAtr(atr);
+export const elSetAtr = el => atr => a => el.setAttribute(atr, a);
+export const elDelAtr = el => atr => el.deleteAttribute(atr);
