@@ -1,14 +1,13 @@
 {
   "name": "shtjs",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "shit/shortcutjs",
   "main": "sht.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node test.js"
   },
-  "keywords": ["func","Sht","Shit","Shortcut"],
-  "author": "Alfian Hidayat",
+  "keywords": ["func", "sht", "shit", "shortcut", "javascript", "js"],
+  "author": "alfianguide",
   "license": "MIT License"
 }
