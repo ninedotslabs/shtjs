@@ -1,6 +1,6 @@
 {
   "name": "shtjs",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "shit/shortcutjs",
   "main": "sht.js",
   "type": "module",
