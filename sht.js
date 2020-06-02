@@ -60,13 +60,13 @@ export function render(element, container) {
 		    if (element.props.suspend > 0) {
 			dom.append(element.props.placeholder)
 			    setTimeout(() => {
-				element.props.children?.forEach((child,i,arr) => {
+				element.props.children.forEach((child,i,arr) => {
 					render(child, dom)
 				});
 				dom.removeChild(dom.firstChild)
 			    }, element.props.suspend)
 		    } else {
-			element.props.children?.forEach((child,i,arr) => {
+			element.props.children.forEach((child,i,arr) => {
 			    render(child, dom)
 			});
 		    }
