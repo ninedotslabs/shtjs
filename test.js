@@ -1,29 +1,43 @@
 import { Shtjs, out, sum, sub, mul, div, mod  } from "./sht.js";
-out("Sum " + sum(10)(5));
-out("Sub " + sub(10)(5));
-out("Mult " + mul(10)(5));
-out("Div " + div(10)(5));
-out("Mod " + mod(10)(5));
 
 function Menu() {
-    let fruits = ["mango","apple","watermelon"];
-    const menuList = [
-	...fruits.map(f => {
-		let propsMenuItem = {
-		    className: "Menu__Item"
-		}
-		return Shtjs.createElement("li", propsMenuItem, f)
+    let url = "http://devufi.io/myapi/get_latest_courses";
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	    let res = JSON.parse(xhttp.response)
+	    let y = [];
+	    let fruits = [];
+	    for (let i=0; i < res.data.length; i++) {
+		fruits.push(res.data[i].title)
 	    }
-	)
-    ]
-    let propsMenu = {
-	className: "Menu"
-    }
-    return Shtjs.createElement("ul", propsMenu, ...menuList)  
+	    const menuList = [
+		...fruits.map(f => {
+			let propsMenuItem = {
+			    className: "Menu__Item"
+			}
+			return Shtjs.createElement("li", propsMenuItem, f)
+		    }
+		)
+	    ]
+	    let propsMenu = {
+		className: "Menu",
+		suspend: 0,
+		placeholder: "Loading"
+	    }
+	    return Shtjs.render(Shtjs.createElement("ul", propsMenu, ...menuList), document.getElementById("app"))
+	}
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+    return {type: "menu", state: "undefined", container: "app"}
 }
 
 function Greet() {
-    return Shtjs.createElement("h1", null, "Hello and Welcome! this is representation of Shtjs")
+    let propsGreet = {
+	className: "Greet"
+    }
+    return Shtjs.createElement("h1", propsGreet, "Hello and Welcome! this is representation of Shtjs")
 }
 
 function Foot() {
@@ -35,7 +49,8 @@ function Foot() {
 
 function App() {
     let propsApp = {
-	className: "App"
+	className: "App",
+	id: "app"
     }
     let appChildren = [Menu(), Greet(), Foot()]
     return Shtjs.createElement("div", propsApp, ...appChildren); 

@@ -27,37 +27,73 @@ export const elGetAtr = el => atr => el.elGetAtr(atr);
 export const elSetAtr = el => atr => a => el.setAttribute(atr, a);
 export const elDelAtr = el => atr => el.deleteAttribute(atr);
 export const elTxt = el => txt => (el.text = txt);
+let renderProccess = "true";
+let renderObj = "true";
+let renderChild = "true";
+let firstTime = "true";
 export function render(element, container) {
-  if (typeof element.type === "function") element = element.type();
-  const dom =
-    element.type === "TEXT_ELEMENT"
-      ? document.createTextNode("")
-      : document.createElement(element.type);
-  const isProperty = key => key !== "children";
-  Object.keys(element.props)
-    .filter(isProperty)
-    .forEach(name => {
-      dom[name] = element.props[name];
-    });
-  element.props.children?.forEach(child => render(child, dom));
-  container.appendChild(dom);
+    switch(element.state) {
+    case "undefined": 
+	break;
+    default:
+	if (renderProccess === "true") {
+	    if (typeof element.type === "function") element = element.type();
+	    const dom =
+		element.type === "TEXT_ELEMENT"
+		? document.createTextNode("")
+		: document.createElement(element.type);
+	    const isProperty = key => key !== "children";
+	    Object.keys(element.props)
+		.filter(isProperty)
+		    .forEach((name,i,arr) => {
+			if (element.props.children.length > 0) {
+			    dom[name] = element.props[name];
+			} else {
+			    dom[name] = "Loading...";
+			    setTimeout(() => {
+				dom[name] = element.props[name];
+			    }, element.props.suspend*2)
+			}
+	    });
+
+	    if (element.props.children.length > 0) {
+		    if (element.props.suspend > 0) {
+			dom.append(element.props.placeholder)
+			    setTimeout(() => {
+				element.props.children?.forEach((child,i,arr) => {
+					render(child, dom)
+				});
+				dom.removeChild(dom.firstChild)
+			    }, element.props.suspend)
+		    } else {
+			element.props.children?.forEach((child,i,arr) => {
+			    render(child, dom)
+			});
+		    }
+	    }
+	    container.appendChild(dom);
+	}
+	break;
+    }
 }
 export function createTextElement(text) {
   return {
     type: "TEXT_ELEMENT",
     props: {
-      nodeValue: text,
-      children: []
+	nodeValue: text.value,
+	suspend: text.suspend,
+	children: []
     }
   };
 }
 export function createElement(type, props, ...children) {
   return {
     type,
+    suspend: props.suspend,
     props: {
       ...props,
-      children: children.map(child =>
-        typeof child === "object" ? child : createTextElement(child)
+	children: children.map(child =>
+			       typeof child === "object" ? child : createTextElement({value: child, suspend: props.suspend})
       )
     }
   };
